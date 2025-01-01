@@ -131,7 +131,7 @@ void Tank::TurretRotate() {
 }
 
 void Tank::Fire() {
-  if (fire_count_down_ == 0) {
+  if (fire_count_down_ == 0 && barrel_overheat_count_down_ == 0) {
     auto player = game_core_->GetPlayer(player_id_);
     if (player) {
       auto &input_data = player->GetInputData();
@@ -141,12 +141,25 @@ void Tank::Fire() {
             position_ + Rotate({0.0f, 1.2f}, turret_rotation_),
             turret_rotation_, GetDamageScale(), velocity);
         fire_count_down_ = kTickPerSecond;  // Fire interval 1 second.
+        barrel_temperature_ += kTickPerSecond * time_to_cool_per_shot_; //Every shot need 2 seconds to cool down
       }
     }
+  }
+  if(barrel_overheat_count_down_ > 0) {
+    barrel_overheat_count_down_--;
+  }
+  if(barrel_temperature_ > 0) {
+    barrel_temperature_--;
   }
   if (fire_count_down_) {
     fire_count_down_--;
   }
+  if(barrel_temperature_ >=  max_barrel_temperature_ * kTickPerSecond) { //max temperature
+    barrel_temperature_ = 0;
+    barrel_overheat_count_down_ = kTickPerSecond * time_to_cool_per_overheat_; //need 5 seconds to cool down if overheat
+  }
+  if(barrel_temperature_ > 0 || barrel_overheat_count_down_ > 0) ShowBarrelStatus();
+  else HideBarrelStatus();
 }
 
 bool Tank::IsHit(glm::vec2 position) const {

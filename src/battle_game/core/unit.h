@@ -56,6 +56,29 @@ class Unit : public Object {
 
   void ShowLifeBar();
   void HideLifeBar();
+
+  void SetBarrelStatusLength(float new_length);
+  void SetBarrelStatusOffset(glm::vec2 new_offset);
+  void SetBarrelStatusFrontColor(glm::vec4 new_color);
+  void SetBarrelStatusBackgroundColor(glm::vec4 new_color);
+  void SetBarrelStatusOverheatColor(glm::vec4 new_color);
+  [[nodiscard]] float GetBarrelStatusLength();
+  [[nodiscard]] glm::vec2 GetBarrelStatusOffset();
+  [[nodiscard]] glm::vec4 GetBarrelStatusFrontColor();
+  [[nodiscard]] glm::vec4 GetBarrelStatusBackgroundColor();
+  [[nodiscard]] glm::vec4 GetBarrelStatusOverheatColor();
+
+  [[nodiscard]] virtual uint32_t GetBarrelTemperature() const {
+    return barrel_temperature_;
+  }
+
+  [[nodiscard]] virtual uint32_t GetBarrelOverheatCountDown() const {
+    return barrel_overheat_count_down_;
+  }
+
+  void ShowBarrelStatus();
+  void HideBarrelStatus();
+
   virtual void RenderLifeBar();
 
   /*
@@ -90,6 +113,18 @@ class Unit : public Object {
   glm::vec4 front_lifebar_color_{};
   glm::vec4 background_lifebar_color_{};
   glm::vec4 fadeout_lifebar_color_{};
+  //
+  uint32_t barrel_temperature_{0};
+  bool barrel_status_display_{false};
+  uint32_t barrel_overheat_count_down_{0};
+  glm::vec2 barrel_status_offset_{};
+  float barrel_status_length_{0.8f};
+  glm::vec4 background_barrel_status_color_{};
+  glm::vec4 front_barrel_status_color_{};
+  glm::vec4 heat_barrel_status_color_{};
+  float time_to_cool_per_shot_{2.0f};
+  float time_to_cool_per_overheat_{8.0f};
+  float max_barrel_temperature_{10.0f};
 
  private:
   float fadeout_health_;
