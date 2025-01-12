@@ -17,5 +17,8 @@ namespace battle_game::unit {
     
       uint32_t fire_count_down_{0};
       uint32_t mine_count_down_{0};
+      glm::vec2 current_speed_{0.0f};
+      float max_speed_{2.0f};
+
     };
 }  // namespace battle_game::unit

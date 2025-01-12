@@ -114,9 +114,9 @@ glm::vec4 GameCore::GetPlayerColor(uint32_t player_id) const {
   if (render_perspective_ == 0) {
     return glm::vec4{0.5f, 1.0f, 0.5f, 1.0f};
   } else if (render_perspective_ == player_id) {
-    return glm::vec4{1.0f, 1.0f, 1.0f, 1.0f};
+    return glm::vec4{1.0f, 0.0f, 0.0f, 1.0f};
   } else {
-    return glm::vec4{1.0f, 0.5f, 0.5f, 1.0f};
+    return glm::vec4{0.0f, 0.0f, 1.0f, 1.0f};
   }
 }
 
@@ -276,6 +276,7 @@ int GameCore::RandomInt(int low_bound, int high_bound) {
 
 void GameCore::SetScene() {
   AddObstacle<obstacle::Block>(glm::vec2{-3.0f, 4.0f});
+  AddObstacle<obstacle::Block>(glm::vec2{3.0f, -4.0f});
   respawn_points_.emplace_back(glm::vec2{0.0f}, 0.0f);
   respawn_points_.emplace_back(glm::vec2{3.0f, 4.0f}, glm::radians(90.0f));
   boundary_low_ = {-10.0f, -10.0f};
